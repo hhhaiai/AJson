@@ -822,4 +822,13 @@ public class JSONObject {
         }
         return null;
     }
+
+    /**
+     * 清除容器中的数据，保持容器正常
+     */
+    public void clear() {
+        if (nameValuePairs != null && nameValuePairs.size() > 0) {
+            nameValuePairs.clear();
+        }
+    }
 }
