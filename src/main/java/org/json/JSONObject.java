@@ -16,13 +16,7 @@
 
 package org.json;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 // Note: this class was written without inspecting the non-free org.json sourcecode.
@@ -99,12 +93,19 @@ public class JSONObject {
      * method returns "null".
      */
     public static final Object NULL = new Object() {
-        @Override public boolean equals(Object o) {
+        @Override
+        public boolean equals(Object o) {
             return o == this || o == null; // API specifies this broken equals implementation
         }
+
         // at least make the broken equals(null) consistent with Objects.hashCode(null).
-        @Override public int hashCode() { return Objects.hashCode(null); }
-        @Override public String toString() {
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(null);
+        }
+
+        @Override
+        public String toString() {
             return "null";
         }
     };
@@ -123,7 +124,7 @@ public class JSONObject {
      * the given map.
      *
      * @param copyFrom a map whose keys are of type {@link String} and whose
-     *     values are of supported types.
+     *                 values are of supported types.
      * @throws NullPointerException if any of the map's keys are null.
      */
     /* (accept a raw type for API compatibility) */
@@ -148,9 +149,9 @@ public class JSONObject {
      * object in the tokener.
      *
      * @param readFrom a tokener whose nextValue() method will yield a
-     *     {@code JSONObject}.
+     *                 {@code JSONObject}.
      * @throws JSONException if the parse fails or doesn't yield a
-     *     {@code JSONObject}.
+     *                       {@code JSONObject}.
      */
     public JSONObject(JSONTokener readFrom) throws JSONException {
         /*
@@ -171,7 +172,7 @@ public class JSONObject {
      *
      * @param json a JSON-encoded string containing an object.
      * @throws JSONException if the parse fails or doesn't yield a {@code
-     *     JSONObject}.
+     *                       JSONObject}.
      */
     public JSONObject(String json) throws JSONException {
         this(new JSONTokener(json));
@@ -182,7 +183,7 @@ public class JSONObject {
      * from the given object. Names that aren't present in {@code copyFrom} will
      * be skipped.
      */
-    public JSONObject(JSONObject copyFrom, String [] names) throws JSONException {
+    public JSONObject(JSONObject copyFrom, String[] names) throws JSONException {
         this();
         for (String name : names) {
             Object value = copyFrom.opt(name);
@@ -215,7 +216,7 @@ public class JSONObject {
      * mapping with the same name.
      *
      * @param value a finite value. May not be {@link Double#isNaN() NaNs} or
-     *     {@link Double#isInfinite() infinities}.
+     *              {@link Double#isInfinite() infinities}.
      * @return this object.
      */
     public JSONObject put(String name, double value) throws JSONException {
@@ -251,9 +252,9 @@ public class JSONObject {
      * mapping for {@code name} is removed.
      *
      * @param value a {@link JSONObject}, {@link JSONArray}, String, Boolean,
-     *     Integer, Long, Double, {@link #NULL}, or {@code null}. May not be
-     *     {@link Double#isNaN() NaNs} or {@link Double#isInfinite()
-     *     infinities}.
+     *              Integer, Long, Double, {@link #NULL}, or {@code null}. May not be
+     *              {@link Double#isNaN() NaNs} or {@link Double#isInfinite()
+     *              infinities}.
      * @return this object.
      */
     public JSONObject put(String name, Object value) throws JSONException {
@@ -295,8 +296,8 @@ public class JSONObject {
      * depending on the number of calls to it.
      *
      * @param value a {@link JSONObject}, {@link JSONArray}, String, Boolean,
-     *     Integer, Long, Double, {@link #NULL} or null. May not be {@link
-     *     Double#isNaN() NaNs} or {@link Double#isInfinite() infinities}.
+     *              Integer, Long, Double, {@link #NULL} or null. May not be {@link
+     *              Double#isNaN() NaNs} or {@link Double#isInfinite() infinities}.
      */
     // TODO: Change {@code append) to {@link #append} when append is
     // unhidden.
@@ -325,9 +326,7 @@ public class JSONObject {
      * will be thrown.
      *
      * @throws JSONException if {@code name} is {@code null} or if the mapping for
-     *         {@code name} is non-null and is not a {@link JSONArray}.
-     *
-     * @hide
+     *                       {@code name} is non-null and is not a {@link JSONArray}.
      */
     public JSONObject append(String name, Object value) throws JSONException {
         Object current = nameValuePairs.get(checkName(name));
@@ -359,7 +358,7 @@ public class JSONObject {
      * Removes the named mapping if it exists; does nothing otherwise.
      *
      * @return the value previously mapped by {@code name}, or null if there was
-     *     no such mapping.
+     * no such mapping.
      */
     public Object remove(String name) {
         return nameValuePairs.remove(name);
@@ -408,7 +407,7 @@ public class JSONObject {
      * can be coerced to a boolean, or throws otherwise.
      *
      * @throws JSONException if the mapping doesn't exist or cannot be coerced
-     *     to a boolean.
+     *                       to a boolean.
      */
     public boolean getBoolean(String name) throws JSONException {
         Object object = get(name);
@@ -442,7 +441,7 @@ public class JSONObject {
      * can be coerced to a double, or throws otherwise.
      *
      * @throws JSONException if the mapping doesn't exist or cannot be coerced
-     *     to a double.
+     *                       to a double.
      */
     public double getDouble(String name) throws JSONException {
         Object object = get(name);
@@ -476,7 +475,7 @@ public class JSONObject {
      * can be coerced to an int, or throws otherwise.
      *
      * @throws JSONException if the mapping doesn't exist or cannot be coerced
-     *     to an int.
+     *                       to an int.
      */
     public int getInt(String name) throws JSONException {
         Object object = get(name);
@@ -512,7 +511,7 @@ public class JSONObject {
      * so this is <a href="#lossy">lossy</a>; use strings to transfer numbers via JSON.
      *
      * @throws JSONException if the mapping doesn't exist or cannot be coerced
-     *     to a long.
+     *                       to a long.
      */
     public long getLong(String name) throws JSONException {
         Object object = get(name);
@@ -582,7 +581,7 @@ public class JSONObject {
      * JSONArray}, or throws otherwise.
      *
      * @throws JSONException if the mapping doesn't exist or is not a {@code
-     *     JSONArray}.
+     *                       JSONArray}.
      */
     public JSONArray getJSONArray(String name) throws JSONException {
         Object object = get(name);
@@ -607,7 +606,7 @@ public class JSONObject {
      * JSONObject}, or throws otherwise.
      *
      * @throws JSONException if the mapping doesn't exist or is not a {@code
-     *     JSONObject}.
+     *                       JSONObject}.
      */
     public JSONObject getJSONObject(String name) throws JSONException {
         Object object = get(name);
@@ -664,10 +663,8 @@ public class JSONObject {
      * is a view of the keys in this object. {@link Set#remove(Object)} will remove
      * the corresponding mapping from this object and set iterator behaviour
      * is undefined if this object is modified after it is returned.
-     *
+     * <p>
      * See {@link #keys()}.
-     *
-     * @hide.
      */
     public Set<String> keySet() {
         return nameValuePairs.keySet();
@@ -687,7 +684,8 @@ public class JSONObject {
      * Encodes this object as a compact JSON string, such as:
      * <pre>{"query":"Pizza","locations":[94043,90210]}</pre>
      */
-    @Override public String toString() {
+    @Override
+    public String toString() {
         try {
             JSONStringer stringer = new JSONStringer();
             writeTo(stringer);
@@ -710,7 +708,7 @@ public class JSONObject {
      * }</pre>
      *
      * @param indentSpaces the number of spaces to indent for each level of
-     *     nesting.
+     *                     nesting.
      */
     public String toString(int indentSpaces) throws JSONException {
         JSONStringer stringer = new JSONStringer(indentSpaces);
@@ -730,7 +728,7 @@ public class JSONObject {
      * Encodes the number as a JSON string.
      *
      * @param number a finite value. May not be {@link Double#isNaN() NaNs} or
-     *     {@link Double#isInfinite() infinities}.
+     *               {@link Double#isInfinite() infinities}.
      */
     public static String numberToString(Number number) throws JSONException {
         if (number == null) {
@@ -758,7 +756,7 @@ public class JSONObject {
      * necessary character escaping.
      *
      * @param data the string to encode. Null will be interpreted as an empty
-     *     string.
+     *             string.
      */
     public static String quote(String data) {
         if (data == null) {
@@ -807,14 +805,14 @@ public class JSONObject {
                 return new JSONObject((Map) o);
             }
             if (o instanceof Boolean ||
-                o instanceof Byte ||
-                o instanceof Character ||
-                o instanceof Double ||
-                o instanceof Float ||
-                o instanceof Integer ||
-                o instanceof Long ||
-                o instanceof Short ||
-                o instanceof String) {
+                    o instanceof Byte ||
+                    o instanceof Character ||
+                    o instanceof Double ||
+                    o instanceof Float ||
+                    o instanceof Integer ||
+                    o instanceof Long ||
+                    o instanceof Short ||
+                    o instanceof String) {
                 return o;
             }
             if (o.getClass().getPackage().getName().startsWith("java.")) {
