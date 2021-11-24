@@ -136,11 +136,22 @@ public class JSONObject {
              * Deviate from the original by checking that keys are non-null and
              * of the proper type. (We still defer validating the values).
              */
-            String key = (String) entry.getKey();
-            if (key == null) {
-                throw new NullPointerException("key == null");
+            // update by sanbo。 when number key, will crash
+            Object key = entry.getKey();
+            if (key instanceof Number) {
+                nameValuePairs.put(String.valueOf(key), wrap(entry.getValue()));
+            } else {
+                String skey = (String) entry.getKey();
+                if (skey == null) {
+                    throw new NullPointerException("key == null");
+                }
+                nameValuePairs.put(skey, wrap(entry.getValue()));
             }
-            nameValuePairs.put(key, wrap(entry.getValue()));
+//            String key = (String) entry.getKey();
+//            if (key == null) {
+//                throw new NullPointerException("key == null");
+//            }
+//            nameValuePairs.put(key, wrap(entry.getValue()));
         }
     }
 
